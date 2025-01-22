@@ -1,6 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace beethoven_api.Database.DBModels;
 
 public class Entity{
+    [Key]
     public long Id { get; set; }
     public string? Name { get; set; }
     public DateTime? CreatedAt { get; set; }
