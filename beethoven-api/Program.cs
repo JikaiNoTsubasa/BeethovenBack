@@ -1,12 +1,14 @@
 using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
 using beethoven_api.Global;
+using beethoven_api.Global.Engine;
 using log4net;
 
 var builder = WebApplication.CreateBuilder(args);
 
 ILog log = LogManager.GetLogger(typeof(Program));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<BeeEngine>();
 builder.Services.AddDbContext<BeeDBContext>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

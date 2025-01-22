@@ -1,12 +1,14 @@
 using beethoven_api.Database;
+using beethoven_api.Global.Engine;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace beethoven_api.Controllers;
 
-public class BeeController(BeeDBContext context) : Controller
+public class BeeController(BeeDBContext context, BeeEngine engine) : Controller
 {
     protected readonly BeeDBContext _context = context;
+    protected readonly BeeEngine _engine = engine;
     protected long _loggedUserId;
 
     override public void OnActionExecuting(ActionExecutingContext context){

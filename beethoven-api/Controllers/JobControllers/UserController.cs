@@ -3,12 +3,13 @@ using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO;
 using beethoven_api.Database.DTO.UserModels;
+using beethoven_api.Global.Engine;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace beethoven_api.Controllers.JobControllers;
 
-public class UserController(BeeDBContext context) : BeeController(context)
+public class UserController(BeeDBContext context, BeeEngine engine) : BeeController(context, engine)
 {
 
     [HttpGet]
@@ -26,15 +27,7 @@ public class UserController(BeeDBContext context) : BeeController(context)
     [Route("api/user")]
     public virtual IActionResult CreateUser([FromForm] RequestCreateUser model){
         try{
-            User user = new(){
-                Firstname = model.Firstname,
-                Lastname = model.Lastname,
-                Email = model.Email,
-                Password = model.Password
-            };
-            user.MarkCreated(_loggedUserId);
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            User user = _engine.CreateUser(model, _loggedUserId);
             return StatusCode(StatusCodes.Status200OK, user.ToDTO());
         }catch(Exception e){
             return StatusCode(StatusCodes.Status500InternalServerError, e);
@@ -43,7 +36,7 @@ public class UserController(BeeDBContext context) : BeeController(context)
 
     [HttpPut]
     [Route("api/user/{id}")]
-    public virtual IActionResult UpdateUser([FromQuery] long id, [FromForm] RequestUpdateUser model){
+    public virtual IActionResult UpdateUser([FromRoute] long id, [FromForm] RequestUpdateUser model){
         try{
             User user = _context.Users.FirstOrDefault(u=>u.Id == id) ?? throw new Exception("User not found");
             if (model.Firstname is not null) user.Firstname = model.Firstname;
