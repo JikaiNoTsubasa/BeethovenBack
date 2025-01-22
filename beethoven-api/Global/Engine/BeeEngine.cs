@@ -2,6 +2,7 @@ using System;
 using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO.CustomerModels;
+using beethoven_api.Database.DTO.ProductModels;
 using beethoven_api.Database.DTO.UserModels;
 using beethoven_api.Global.Security;
 
@@ -35,5 +36,17 @@ public class BeeEngine(BeeDBContext context)
         _context.Customers.Add(customer);
         _context.SaveChanges();
         return customer;
+    }
+
+    public virtual Product CreateProduct(RequestCreateProduct model, long userId){
+        Product product = new(){
+            Name = model.Name,
+            SLAId = model.SLAId,
+            CustomerId = model.CustomerId
+        };
+        product.MarkCreated(userId);
+        _context.Products.Add(product);
+        _context.SaveChanges();
+        return product;
     }
 }

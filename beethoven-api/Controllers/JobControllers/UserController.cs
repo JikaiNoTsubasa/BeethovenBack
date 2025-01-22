@@ -4,6 +4,7 @@ using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO;
 using beethoven_api.Database.DTO.UserModels;
 using beethoven_api.Global.Engine;
+using beethoven_api.Global.Query;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
@@ -16,8 +17,10 @@ public class UserController(BeeDBContext context, BeeEngine engine) : BeeControl
     [Route("api/users")]
     public virtual IActionResult FetchUsers(){
         try{
-            var res =_context.Users.Select(u=>u.ToDTO());
-            return StatusCode(StatusCodes.Status200OK, res);
+            var res =_context.Users
+                .Paged(_pagination, out QueryMeta? meta)
+                .Select(u=>u.ToDTO());
+            return StatusCode(StatusCodes.Status200OK, res, meta);
         }catch(Exception e){
             return StatusCode(StatusCodes.Status500InternalServerError, e);
         }

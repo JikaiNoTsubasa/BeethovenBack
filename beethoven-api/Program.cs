@@ -2,7 +2,11 @@ using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
 using beethoven_api.Global;
 using beethoven_api.Global.Engine;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using log4net;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +23,24 @@ builder.Services.AddControllersWithViews(
 
 // Disables the string conversions from empty to null
 builder.Services.AddMvc().AddMvcOptions(options => options.ModelMetadataDetailsProviders.Add(new CustomMetadataProvider()));
+
+/*
+// Configure json
+builder.Services.AddControllers().AddNewtonsoftJson(o =>
+            {
+                o.SerializerSettings.ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy
+                    {
+                        OverrideSpecifiedNames = false
+                    }
+                };
+                o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                o.SerializerSettings.Converters.Add(new UtcDateTimeJsonConverter());
+
+            });
+            */
 
 var app = builder.Build();
 
@@ -54,6 +76,19 @@ using (var scope = app.Services.CreateScope()){
     }
     if (!statuses.Any(s=>s.Name!.Equals("Closed (Fixed)"))){
         context.TicketStatuses.Add(new TicketStatus{Id = 6,Name = "Closed (Fixed)"});
+    }
+    context.SaveChanges();
+
+    List<SLA> slas = [.. context.SLAs];
+
+    if (!slas.Any(s=>s.Name!.Equals("Low"))){
+        context.SLAs.Add(new SLA{Name = "Low"});
+    }
+    if (!slas.Any(s=>s.Name!.Equals("Medium"))){
+        context.SLAs.Add(new SLA{Name = "Medium"});
+    }
+    if (!slas.Any(s=>s.Name!.Equals("High"))){
+        context.SLAs.Add(new SLA{Name = "High"});
     }
     context.SaveChanges();
 }

@@ -2,7 +2,7 @@ using System;
 using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO;
-using beethoven_api.Database.DTO.CustomerModels;
+using beethoven_api.Database.DTO.ProductModels;
 using beethoven_api.Global.Engine;
 using beethoven_api.Global.Query;
 using Microsoft.AspNetCore.Mvc;
@@ -10,15 +10,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace beethoven_api.Controllers.JobControllers;
 
-public class CustomerController(BeeDBContext context, BeeEngine engine) : BeeController(context, engine)
+public class ProductController(BeeDBContext context, BeeEngine engine) : BeeController(context, engine)
 {
     [HttpGet]
-    [Route("api/customers")]
-    public virtual IActionResult FetchCustomers(){
+    [Route("api/products")]
+    public virtual IActionResult FetchUsers(){
         try{
-            var res =_context.Customers
-                .Include(c=>c.Products)
-                .Include(c=>c.Tickets)
+            var res =_context.Products
+                .Include(p=>p.Customer)
+                .Include(p=>p.SLA)
                 .Paged(_pagination, out QueryMeta? meta)
                 .Select(c=>c.ToDTO());
             return StatusCode(StatusCodes.Status200OK, res, meta);
@@ -28,11 +28,11 @@ public class CustomerController(BeeDBContext context, BeeEngine engine) : BeeCon
     }
 
     [HttpPost]
-    [Route("api/customer")]
-    public virtual IActionResult CreateCustomer([FromForm] RequestCreateCustomer model){
+    [Route("api/product")]
+    public virtual IActionResult CreateProduct([FromForm] RequestCreateProduct model){
         try{
-            Customer customer = _engine.CreateCustomer(model, _loggedUserId);
-            return StatusCode(StatusCodes.Status200OK, customer.ToDTO());
+            Product product = _engine.CreateProduct(model, _loggedUserId);
+            return StatusCode(StatusCodes.Status200OK, product.ToDTO());
         }catch(Exception e){
             return StatusCode(StatusCodes.Status500InternalServerError, e);
         }

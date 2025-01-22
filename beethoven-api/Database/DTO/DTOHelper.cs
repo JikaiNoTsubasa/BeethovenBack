@@ -1,6 +1,7 @@
 using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO.CustomerModels;
 using beethoven_api.Database.DTO.ProductModels;
+using beethoven_api.Database.DTO.SLAModels;
 using beethoven_api.Database.DTO.TicketModels;
 using beethoven_api.Database.DTO.UserModels;
 
@@ -34,8 +35,17 @@ public static class DTOHelper
             ContactEmail = model.ContactEmail,
             ContactPhone = model.ContactPhone,
             Comment = model.Comment,
-            Tickets = model.Tickets?.Select(t=>t.ToDTO()).ToList(),
-            Products = model.Products?.Select(p=>p.ToDTO()).ToList()
+            Tickets = (model.Tickets is not null && model.Tickets.Count != 0) ? model.Tickets?.Select(t=>t.ToDTO()).ToList() : [],
+            Products = (model.Products is not null && model.Products.Count != 0) ? model.Products?.Select(p=>p.ToDTO()).ToList() : []
+        };
+    }
+    public static ResponseCustomerSimplified ToDTOSimplified(this Customer model){
+        return new ResponseCustomerSimplified{
+            Id = model.Id,
+            Name = model.Name,
+            ContactEmail = model.ContactEmail,
+            ContactPhone = model.ContactPhone,
+            Comment = model.Comment
         };
     }
 #endregion
@@ -57,6 +67,24 @@ public static class DTOHelper
 #region Product
     public static ResponseProduct ToDTO(this Product model){
         return new ResponseProduct{
+            Id = model.Id,
+            Name = model.Name,
+            SLA = model.SLA?.ToDTOSimplified(),
+            Customer = model.Customer?.ToDTOSimplified()
+        };
+    }
+#endregion
+#region SLA
+    public static ResponseSLA ToDTO(this SLA model){
+        return new ResponseSLA{
+            Id = model.Id,
+            Name = model.Name,
+            Products = (model.Products is not null && model.Products.Count != 0) ? model.Products?.Select(p=>p.ToDTO()).ToList() : []
+        };
+    }
+
+    public static ResponseSLASimplified ToDTOSimplified(this SLA model){
+        return new ResponseSLASimplified{
             Id = model.Id,
             Name = model.Name
         };
