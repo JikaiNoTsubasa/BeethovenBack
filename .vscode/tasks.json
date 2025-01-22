@@ -1,0 +1,50 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "10 Database add migration",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+              "ef",
+              "migrations",
+              "add",
+              "${input:migration_name}",
+              "--project",
+              "beethoven-api",
+              "-v"
+            ],
+            "options": {
+              "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "20 Database update",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+              "ef",
+              "database",
+              "update",
+              "--project",
+              "beethoven-api",
+              "-v"
+            ],
+            "options": {
+              "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": "$msCompile"
+        },
+    ],
+    "inputs": [
+    // ----- ef ------
+    {
+      "id": "migration_name",
+      "type": "promptString",
+      "description": "Migration name"
+    },
+  ]
+}

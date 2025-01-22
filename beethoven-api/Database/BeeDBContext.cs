@@ -14,6 +14,8 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(builder);
         builder.Entity<Entity>().UseTptMappingStrategy().ToTable("Entities");
+
+        builder.Entity<User>().HasIndex(u => u.Email).IsUnique();
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

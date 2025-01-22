@@ -1,4 +1,5 @@
 using beethoven_api.Database.DBModels;
+using beethoven_api.Database.DTO.UserModels;
 
 namespace beethoven_api.Database.DTO;
 

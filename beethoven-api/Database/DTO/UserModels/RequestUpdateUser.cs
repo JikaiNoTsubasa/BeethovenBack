@@ -1,9 +1,9 @@
-namespace beethoven_api.Database.DTO;
+namespace beethoven_api.Database.DTO.UserModels;
 
-public record ResponseUser : ResponseEntity{
+public record class RequestUpdateUser
+{
     public string? Firstname { get; set; }
     public string? Lastname { get; set; }
     public string? Email { get; set; }
     public string? Password { get; set; }
-
 }
