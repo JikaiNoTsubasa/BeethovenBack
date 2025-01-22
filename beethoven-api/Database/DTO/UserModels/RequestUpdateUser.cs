@@ -1,6 +1,6 @@
 namespace beethoven_api.Database.DTO.UserModels;
 
-public record class RequestUpdateUser
+public record RequestUpdateUser
 {
     public string? Firstname { get; set; }
     public string? Lastname { get; set; }

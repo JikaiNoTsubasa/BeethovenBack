@@ -1,6 +1,7 @@
 using System;
 using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
+using beethoven_api.Database.DTO.CustomerModels;
 using beethoven_api.Database.DTO.UserModels;
 using beethoven_api.Global.Security;
 
@@ -21,5 +22,18 @@ public class BeeEngine(BeeDBContext context)
         _context.Users.Add(user);
         _context.SaveChanges();
         return user;
+    }
+
+    public virtual Customer CreateCustomer(RequestCreateCustomer model, long userId){
+        Customer customer = new(){
+            Name = model.Name,
+            ContactEmail = model.ContactEmail,
+            ContactPhone = model.ContactPhone,
+            Comment = model.Comment
+        };
+        customer.MarkCreated(userId);
+        _context.Customers.Add(customer);
+        _context.SaveChanges();
+        return customer;
     }
 }
