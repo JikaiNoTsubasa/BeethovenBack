@@ -1,7 +1,9 @@
 using System;
 using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
+using beethoven_api.Database.DTO;
 using beethoven_api.Database.DTO.CustomerModels;
+using beethoven_api.Database.DTO.LoginModels;
 using beethoven_api.Database.DTO.ProductModels;
 using beethoven_api.Database.DTO.UserModels;
 using beethoven_api.Global.Security;
@@ -48,5 +50,18 @@ public class BeeEngine(BeeDBContext context)
         _context.Products.Add(product);
         _context.SaveChanges();
         return product;
+    }
+
+    public virtual ResponseLogin LoginUser(string email, string password){
+        string hashedPassword = BeeHash.GetHash(password);
+        User? user = _context.Users.FirstOrDefault(u=>u.Email == email && u.Password!.Equals(hashedPassword));
+
+        bool isLogged = user is not null;
+
+        return new(){
+            User = user?.ToDTO(),
+            AccessToken = "token",
+            IsLogged = isLogged
+            };
     }
 }
