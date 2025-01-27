@@ -8,4 +8,5 @@ public record RequestCreateTicket
     public long? AssignedToId { get; set; }
     public long? ReviewedById { get; set; }
     public long? GitlabTicketId { get; set; }
+    public long? StatusId { get; set; }
 }

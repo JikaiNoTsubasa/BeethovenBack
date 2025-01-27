@@ -9,4 +9,6 @@ public class User : Entity
     public List<Ticket>? AssignedTickets { get; set; }
     public List<Ticket>? ReviewedTickets { get; set; }
     public string? Avatar { get; set; }
+    public long PreferencesId { get; set; }
+    public Preferences? Preferences { get; set; }
 }

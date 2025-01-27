@@ -62,8 +62,12 @@ public class BeeEngine(BeeDBContext context)
             AssignedToId = model.AssignedToId,
             ReviewedById = model.ReviewedById,
             GitlabTicketId = model.GitlabTicketId,
-            StatusId = 1,
         };
+        if (model.StatusId is not null){
+            ticket.StatusId = model.StatusId;
+        }else if (model.AssignedToId is not null){
+            ticket.StatusId = 2;
+        }
         ticket.MarkCreated(userId);
         _context.Tickets.Add(ticket);
         _context.SaveChanges();

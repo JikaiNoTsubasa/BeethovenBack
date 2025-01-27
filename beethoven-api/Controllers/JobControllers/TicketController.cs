@@ -48,6 +48,19 @@ public class TicketController(BeeDBContext context, BeeEngine engine) : BeeContr
         }
     }
 
+    [HttpGet]
+    [Route("api/ticket/{id}")]
+    public virtual IActionResult FetchTicketById([FromRoute] long id){
+        try{
+            var res = GenerateTicketQuery()
+                .FirstOrDefault(t=>t.Id == id)?
+                .ToDTO();
+            return StatusCode(StatusCodes.Status200OK, res);
+        }catch(Exception e){
+            return StatusCode(StatusCodes.Status500InternalServerError, e);
+        }
+    }
+
     [HttpPost]
     [Route("api/ticket")]
     public virtual IActionResult CreateTicket([FromForm] RequestCreateTicket model){

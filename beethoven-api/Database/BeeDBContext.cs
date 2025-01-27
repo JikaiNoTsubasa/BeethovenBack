@@ -52,6 +52,11 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .HasMany(c=>c.Tickets)
             .WithOne(p=>p.Product)
             .HasForeignKey(p=>p.ProductId);
+
+        builder.Entity<User>()
+            .HasOne(u=>u.Preferences)
+            .WithOne(p=>p.User)
+            .HasForeignKey<Preferences>(p=>p.UserId).OnDelete(DeleteBehavior.Cascade);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
