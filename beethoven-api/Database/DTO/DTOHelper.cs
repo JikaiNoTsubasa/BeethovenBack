@@ -23,7 +23,8 @@ public static class DTOHelper
             UpdatedAt = model.UpdatedAt,
             UpdatedById = model.UpdatedById,
             DeletedAt = model.DeletedAt,
-            DeletedById = model.DeletedById
+            DeletedById = model.DeletedById,
+            Avatar = model.Avatar
         };
     }
 #endregion

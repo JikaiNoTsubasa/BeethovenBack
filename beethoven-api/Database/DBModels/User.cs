@@ -8,4 +8,5 @@ public class User : Entity
     public string? Password { get; set; }
     public List<Ticket>? AssignedTickets { get; set; }
     public List<Ticket>? ReviewedTickets { get; set; }
+    public string? Avatar { get; set; }
 }

@@ -21,6 +21,7 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
         builder.Entity<Entity>().UseTptMappingStrategy().ToTable("Entities");
 
         builder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+        builder.Entity<User>().Property(u => u.Avatar).HasDefaultValue("avatar-default.png");
 
         builder.Entity<Product>()
             .HasOne(p => p.SLA)
