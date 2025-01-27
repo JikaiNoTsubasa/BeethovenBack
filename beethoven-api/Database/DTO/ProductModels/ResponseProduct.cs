@@ -9,4 +9,5 @@ public record ResponseProduct
     public string? Name { get; set; }
     public ResponseCustomerSimplified? Customer { get; set; }
     public ResponseSLASimplified? SLA { get; set; }
+    public string? CodeBaseLink { get; set; }
 }

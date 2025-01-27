@@ -5,6 +5,7 @@ using beethoven_api.Database.DTO;
 using beethoven_api.Database.DTO.CustomerModels;
 using beethoven_api.Database.DTO.LoginModels;
 using beethoven_api.Database.DTO.ProductModels;
+using beethoven_api.Database.DTO.TicketModels;
 using beethoven_api.Database.DTO.UserModels;
 using beethoven_api.Global.Security;
 
@@ -20,6 +21,7 @@ public class BeeEngine(BeeDBContext context)
             Lastname = model.Lastname,
             Email = model.Email,
             Password = BeeHash.GetHash(model.Password ?? "test"),
+            Avatar = model.Avatar
         };
         user.MarkCreated(userId);
         _context.Users.Add(user);
@@ -50,6 +52,22 @@ public class BeeEngine(BeeDBContext context)
         _context.Products.Add(product);
         _context.SaveChanges();
         return product;
+    }
+
+    public virtual Ticket CreateTicket(RequestCreateTicket model, long userId){
+        Ticket ticket = new(){
+            Name = model.Name,
+            Description = model.Description,
+            ProductId = model.ProductId,
+            AssignedToId = model.AssignedToId,
+            ReviewedById = model.ReviewedById,
+            GitlabTicketId = model.GitlabTicketId,
+            StatusId = 1,
+        };
+        ticket.MarkCreated(userId);
+        _context.Tickets.Add(ticket);
+        _context.SaveChanges();
+        return ticket;
     }
 
     public virtual ResponseLogin LoginUser(string email, string password){

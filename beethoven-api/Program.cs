@@ -24,7 +24,7 @@ builder.Services.AddControllersWithViews(
 // Disables the string conversions from empty to null
 builder.Services.AddMvc().AddMvcOptions(options => options.ModelMetadataDetailsProviders.Add(new CustomMetadataProvider()));
 
-/*
+
 // Configure json
 builder.Services.AddControllers().AddNewtonsoftJson(o =>
             {
@@ -40,7 +40,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
                 o.SerializerSettings.Converters.Add(new UtcDateTimeJsonConverter());
 
             });
-            */
+            
 
 var app = builder.Build();
 

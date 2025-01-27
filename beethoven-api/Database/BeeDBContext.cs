@@ -48,10 +48,10 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .WithOne(p=>p.Customer)
             .HasForeignKey(p=>p.CustomerId);
 
-        builder.Entity<Customer>()
+        builder.Entity<Product>()
             .HasMany(c=>c.Tickets)
-            .WithOne(p=>p.Customer)
-            .HasForeignKey(p=>p.CustomerId);
+            .WithOne(p=>p.Product)
+            .HasForeignKey(p=>p.ProductId);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

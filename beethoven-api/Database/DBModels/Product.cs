@@ -10,4 +10,5 @@ public class Product : Entity
     public long? CustomerId { get; set; }
     public Customer? Customer { get; set; }
     public string? CodeBaseLink { get; set; }
+    public List<Ticket>? Tickets { get; set; }
 }

@@ -8,5 +8,4 @@ public class Customer : Entity
     public string? ContactPhone { get; set; }
     public string? Comment { get; set; }
     public List<Product>? Products { get; set; }
-    public List<Ticket>? Tickets { get; set; }
 }

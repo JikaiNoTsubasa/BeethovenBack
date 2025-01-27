@@ -18,7 +18,6 @@ public class CustomerController(BeeDBContext context, BeeEngine engine) : BeeCon
         try{
             var res =_context.Customers
                 .Include(c=>c.Products)
-                .Include(c=>c.Tickets)
                 .Paged(_pagination, out QueryMeta? meta)
                 .Select(c=>c.ToDTO());
             return StatusCode(StatusCodes.Status200OK, res, meta);

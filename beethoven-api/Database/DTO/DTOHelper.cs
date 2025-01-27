@@ -36,7 +36,6 @@ public static class DTOHelper
             ContactEmail = model.ContactEmail,
             ContactPhone = model.ContactPhone,
             Comment = model.Comment,
-            Tickets = (model.Tickets is not null && model.Tickets.Count != 0) ? model.Tickets?.Select(t=>t.ToDTO()).ToList() : [],
             Products = (model.Products is not null && model.Products.Count != 0) ? model.Products?.Select(p=>p.ToDTO()).ToList() : []
         };
     }
@@ -54,7 +53,15 @@ public static class DTOHelper
     public static ResponseTicket ToDTO(this Ticket model){
         return new ResponseTicket{
             Id = model.Id,
-            Name = model.Name
+            Name = model.Name,
+            Status = model.Status?.ToDTO(),
+            CreatedAt = model.CreatedAt,
+            UpdatedAt = model.UpdatedAt,
+            AssignedTo = model.AssignedTo?.ToDTO(),
+            ReviewedBy = model.ReviewedBy?.ToDTO(),
+            Description = model.Description,
+            Product = model.Product?.ToDTO(),
+            GitlabTicketId = model.GitlabTicketId
         };
     }
 
@@ -71,7 +78,8 @@ public static class DTOHelper
             Id = model.Id,
             Name = model.Name,
             SLA = model.SLA?.ToDTOSimplified(),
-            Customer = model.Customer?.ToDTOSimplified()
+            Customer = model.Customer?.ToDTOSimplified(),
+            CodeBaseLink = model.CodeBaseLink
         };
     }
 #endregion
