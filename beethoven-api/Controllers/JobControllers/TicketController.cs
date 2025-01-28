@@ -5,11 +5,13 @@ using beethoven_api.Database.DTO;
 using beethoven_api.Database.DTO.TicketModels;
 using beethoven_api.Global.Engine;
 using beethoven_api.Global.Query;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace beethoven_api.Controllers.JobControllers;
 
+[Authorize]
 public class TicketController(BeeDBContext context, BeeEngine engine) : BeeController(context, engine)
 {
 

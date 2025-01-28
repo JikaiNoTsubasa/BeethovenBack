@@ -8,6 +8,7 @@ using beethoven_api.Database.DTO.ProductModels;
 using beethoven_api.Database.DTO.TicketModels;
 using beethoven_api.Database.DTO.UserModels;
 using beethoven_api.Global.Security;
+using beethoven_api.Global.Token;
 
 namespace beethoven_api.Global.Engine;
 
@@ -89,11 +90,16 @@ public class BeeEngine(BeeDBContext context)
         string hashedPassword = BeeHash.GetHash(password);
         User? user = _context.Users.FirstOrDefault(u=>u.Email == email && u.Password!.Equals(hashedPassword));
 
+
         bool isLogged = user is not null;
+
+        if (user is null) return new(){ IsLogged = false };
+
+        var bearer = AuthorizationToken.GenerateBearer(user, AuthConstants.JwtSecret);
 
         return new(){
             User = user?.ToDTO(),
-            AccessToken = "token",
+            AccessToken = bearer,
             IsLogged = isLogged
             };
     }

@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using log4net;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using beethoven_api.Global.Token;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +44,31 @@ builder.Services.AddControllers().AddNewtonsoftJson(o =>
                 o.SerializerSettings.Converters.Add(new UtcDateTimeJsonConverter());
 
             });
+
+// Add bearer support
+builder.Services.AddAuthentication(options =>{
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>{
+    var keyByteArray = Encoding.UTF8.GetBytes(AuthConstants.JwtSecret);
+    var signinKey = new SymmetricSecurityKey(keyByteArray);
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ClockSkew = TimeSpan.Zero,
+ 
+        ValidateAudience = true,
+        ValidAudience = AuthConstants.JwtAudience,
+ 
+        ValidateIssuer = true,
+        ValidIssuer = AuthConstants.JwtIssuer,
+ 
+        ValidateLifetime = true,
+ 
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = signinKey
+    };
+});
+
             
 
 var app = builder.Build();

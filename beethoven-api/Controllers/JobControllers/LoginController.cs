@@ -2,12 +2,16 @@ using System;
 using beethoven_api.Database;
 using beethoven_api.Database.DTO.LoginModels;
 using beethoven_api.Global.Engine;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace beethoven_api.Controllers.JobControllers;
 
-public class LoginController(BeeDBContext context, BeeEngine engine) : BeeController(context, engine)
+[AllowAnonymous]
+public class LoginController(BeeEngine engine) : Controller
 {
+    private readonly BeeEngine _engine = engine;
+    
     [HttpPost]
     [Route("/api/login")]
     public virtual IActionResult Login([FromForm] RequestLogin model){
