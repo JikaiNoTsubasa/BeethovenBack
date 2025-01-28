@@ -18,7 +18,8 @@ public class TicketController(BeeDBContext context, BeeEngine engine) : BeeContr
             .Include(t=>t.Product).ThenInclude(p=>p!.Customer)
             .Include(t=>t.AssignedTo)
             .Include(t=>t.ReviewedBy)
-            .Include(t=>t.Status);
+            .Include(t=>t.Status)
+            .Include(t=>t.Activities)!.ThenInclude(a=>a.User);
     }
 
     [HttpGet]

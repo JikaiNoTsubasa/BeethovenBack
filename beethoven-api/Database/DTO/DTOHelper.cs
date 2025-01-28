@@ -61,7 +61,8 @@ public static class DTOHelper
             ReviewedBy = model.ReviewedBy?.ToDTO(),
             Description = model.Description,
             Product = model.Product?.ToDTO(),
-            GitlabTicketId = model.GitlabTicketId
+            GitlabTicketId = model.GitlabTicketId,
+            Activities = (model.Activities is not null && model.Activities.Count != 0) ? model.Activities?.Select(a=>a.ToDTO()).ToList() : []
         };
     }
 
@@ -69,6 +70,15 @@ public static class DTOHelper
         return new ResponseTicketStatus{
             Id = model.Id,
             Name = model.Name
+        };
+    }
+
+    public static ResponseTicketActivity ToDTO(this TicketActivity model){
+        return new ResponseTicketActivity{
+            Id = model.Id,
+            User = model.User?.ToDTO(),
+            Message = model.Message,
+            CreatedAt = model.CreatedAt
         };
     }
 #endregion

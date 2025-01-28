@@ -17,4 +17,5 @@ public record ResponseTicket
     public DateTime? UpdatedAt { get; set; }
     public ResponseTicketStatus? Status { get; set; }
     public long? GitlabTicketId { get; set; }
+    public List<ResponseTicketActivity>? Activities { get; set; }
 }

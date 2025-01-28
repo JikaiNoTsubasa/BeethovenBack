@@ -61,14 +61,25 @@ public class BeeEngine(BeeDBContext context)
             ProductId = model.ProductId,
             AssignedToId = model.AssignedToId,
             ReviewedById = model.ReviewedById,
-            GitlabTicketId = model.GitlabTicketId,
+            GitlabTicketId = model.GitlabTicketId
         };
         if (model.StatusId is not null){
             ticket.StatusId = model.StatusId;
         }else if (model.AssignedToId is not null){
             ticket.StatusId = 2;
+        }else{
+            ticket.StatusId = 1;
         }
         ticket.MarkCreated(userId);
+
+        TicketActivity activity = new(){
+            TicketId = ticket.Id,
+            UserId = userId,
+            Message = "Ticket created",
+            CreatedAt = DateTime.UtcNow  
+        };
+        ticket.Activities = [];
+        ticket.Activities.Add(activity);
         _context.Tickets.Add(ticket);
         _context.SaveChanges();
         return ticket;
