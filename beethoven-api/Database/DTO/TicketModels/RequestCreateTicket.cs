@@ -9,4 +9,6 @@ public record RequestCreateTicket
     public long? ReviewedById { get; set; }
     public long? GitlabTicketId { get; set; }
     public long? StatusId { get; set; }
+    public long PriorityId { get; set; }
+    public long TypeId { get; set; }
 }

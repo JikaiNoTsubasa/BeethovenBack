@@ -27,6 +27,17 @@ public class UserController(BeeDBContext context, BeeEngine engine) : BeeControl
     }
 
     [HttpGet]
+    [Route("api/myuser")]
+    public virtual IActionResult FetchMyUser(){
+        try{
+            var res =_context.Users.FirstOrDefault(u=>u.Id == _loggedUserId)?.ToDTO();
+            return StatusCode(StatusCodes.Status200OK, res);
+        }catch(Exception e){
+            return StatusCode(StatusCodes.Status500InternalServerError, e);
+        }
+    }
+
+    [HttpGet]
     [Route("api/user/{id}")]
     public virtual IActionResult FetchUsers([FromRoute] long id){
         try{

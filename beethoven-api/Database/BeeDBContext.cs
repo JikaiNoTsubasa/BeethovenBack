@@ -16,6 +16,8 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Preferences> Preferences { get; set; }
     public DbSet<TicketActivity> TicketActivities { get; set; }
+    public DbSet<TicketType> TicketTypes { get; set; }
+    public DbSet<Priority> Priorities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -44,6 +46,16 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .HasOne(t => t.ReviewedBy)
             .WithMany(p => p.ReviewedTickets)
             .HasForeignKey(p => p.ReviewedById);
+
+        builder.Entity<Ticket>()
+            .HasOne(t => t.Type)
+            .WithMany(p => p.Tickets)
+            .HasForeignKey(p => p.TypeId);
+        
+        builder.Entity<Ticket>()
+            .HasOne(t => t.Priority)
+            .WithMany(p => p.Tickets)
+            .HasForeignKey(p => p.PriorityId);
 
         builder.Entity<Ticket>()
             .HasMany(t => t.Activities)

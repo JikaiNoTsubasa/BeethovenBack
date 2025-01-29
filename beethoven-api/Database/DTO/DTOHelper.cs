@@ -62,7 +62,9 @@ public static class DTOHelper
             Description = model.Description,
             Product = model.Product?.ToDTO(),
             GitlabTicketId = model.GitlabTicketId,
-            Activities = (model.Activities is not null && model.Activities.Count != 0) ? model.Activities?.Select(a=>a.ToDTO()).ToList() : []
+            Activities = (model.Activities is not null && model.Activities.Count != 0) ? model.Activities?.Select(a=>a.ToDTO()).ToList() : [],
+            Type = model.Type?.ToDTO(),
+            Priority = model.Priority?.ToDTO()
         };
     }
 
@@ -79,6 +81,22 @@ public static class DTOHelper
             User = model.User?.ToDTO(),
             Message = model.Message,
             CreatedAt = model.CreatedAt
+        };
+    }
+
+    public static ResponseTicketType ToDTO(this TicketType model){
+        return new ResponseTicketType{
+            Id = model.Id,
+            Name = model.Name,
+            Description = model.Description
+        };
+    }
+
+    public static ResponsePriority ToDTO(this Priority model){
+        return new ResponsePriority{
+            Id = model.Id,
+            Name = model.Name,
+            Description = model.Description
         };
     }
 #endregion

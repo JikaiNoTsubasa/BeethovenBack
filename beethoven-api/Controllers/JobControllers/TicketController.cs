@@ -15,12 +15,15 @@ namespace beethoven_api.Controllers.JobControllers;
 public class TicketController(BeeDBContext context, BeeEngine engine) : BeeController(context, engine)
 {
 
+#region Ticket
     private IQueryable<Ticket> GenerateTicketQuery(){
         return _context.Tickets
             .Include(t=>t.Product).ThenInclude(p=>p!.Customer)
             .Include(t=>t.AssignedTo)
             .Include(t=>t.ReviewedBy)
             .Include(t=>t.Status)
+            .Include(t=>t.Type)
+            .Include(t=>t.Priority)
             .Include(t=>t.Activities)!.ThenInclude(a=>a.User);
     }
 
@@ -75,4 +78,28 @@ public class TicketController(BeeDBContext context, BeeEngine engine) : BeeContr
             return StatusCode(StatusCodes.Status500InternalServerError, e);
         }
     }
+#endregion
+#region Type / Priority / Status
+    [HttpGet]
+    [Route("api/tickettypes")]
+    public virtual IActionResult FetchTypes(){
+        try{
+            var res = _context.TicketTypes.ToList();
+            return StatusCode(StatusCodes.Status200OK, res);
+        }catch(Exception e){
+            return StatusCode(StatusCodes.Status500InternalServerError, e);
+        }
+    }
+
+    [HttpGet]
+    [Route("api/priorities")]
+    public virtual IActionResult FetchPriorities(){
+        try{
+            var res = _context.Priorities.ToList();
+            return StatusCode(StatusCodes.Status200OK, res);
+        }catch(Exception e){
+            return StatusCode(StatusCodes.Status500InternalServerError, e);
+        }
+    }
+#endregion
 }

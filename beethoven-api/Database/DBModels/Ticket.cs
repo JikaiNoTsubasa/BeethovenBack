@@ -17,4 +17,8 @@ public class Ticket : Entity
     public User? ReviewedBy { get; set; }
     public long? GitlabTicketId { get; set; }
     public List<TicketActivity>? Activities { get; set; }
+    public long TypeId { get; set; }
+    public TicketType? Type { get; set; }
+    public long PriorityId { get; set; }
+    public Priority? Priority { get; set; }
 }

@@ -91,6 +91,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope()){
     using var context = scope.ServiceProvider.GetRequiredService<BeeDBContext>();
 
+    // Create ticket statuses
     List<TicketStatus> statuses = [.. context.TicketStatuses];
 
     if (!statuses.Any(s=>s.Name!.Equals("New"))){
@@ -113,6 +114,7 @@ using (var scope = app.Services.CreateScope()){
     }
     context.SaveChanges();
 
+    // Create SLAs
     List<SLA> slas = [.. context.SLAs];
 
     if (!slas.Any(s=>s.Name!.Equals("Low"))){
@@ -123,6 +125,36 @@ using (var scope = app.Services.CreateScope()){
     }
     if (!slas.Any(s=>s.Name!.Equals("High"))){
         context.SLAs.Add(new SLA{Name = "High"});
+    }
+    context.SaveChanges();
+
+    // Create Ticket Types
+    List<TicketType> types = [.. context.TicketTypes];
+
+    if (!types.Any(s=>s.Name!.Equals("Incident"))){
+        context.TicketTypes.Add(new TicketType{Id = 1, Name = "Incident", Description = "An unplanned interruption to an IT service."});
+    }
+    if (!types.Any(s=>s.Name!.Equals("Problem"))){
+        context.TicketTypes.Add(new TicketType{Id = 2, Name = "Problem", Description = "The underlying cause of one or more incidents."});
+    }
+    if (!types.Any(s=>s.Name!.Equals("Change Request"))){
+        context.TicketTypes.Add(new TicketType{Id = 3, Name = "Change Request", Description = "A formal proposal for a change to IT services."});
+    }
+    if (!types.Any(s=>s.Name!.Equals("Service Request"))){
+        context.TicketTypes.Add(new TicketType{Id = 4, Name = "Service Request", Description = "A request for information, advice, or access to a service."});
+    }
+
+    // Create priorities
+    List<Priority> priorities = [.. context.Priorities];
+
+    if (!priorities.Any(s=>s.Name!.Equals("High"))){
+        context.Priorities.Add(new Priority{Id = 1, Name = "High"});
+    }
+    if (!priorities.Any(s=>s.Name!.Equals("Medium"))){
+        context.Priorities.Add(new Priority{Id = 2, Name = "Medium"});
+    }
+    if (!priorities.Any(s=>s.Name!.Equals("Low"))){
+        context.Priorities.Add(new Priority{Id = 3, Name = "Low"});
     }
     context.SaveChanges();
 }

@@ -62,7 +62,9 @@ public class BeeEngine(BeeDBContext context)
             ProductId = model.ProductId,
             AssignedToId = model.AssignedToId,
             ReviewedById = model.ReviewedById,
-            GitlabTicketId = model.GitlabTicketId
+            GitlabTicketId = model.GitlabTicketId,
+            TypeId = model.TypeId,
+            PriorityId = model.PriorityId
         };
         if (model.StatusId is not null){
             ticket.StatusId = model.StatusId;

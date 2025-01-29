@@ -10,6 +10,8 @@ public record ResponseTicket
     public long Id { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
+    public ResponseTicketType? Type { get; set; }
+    public ResponsePriority? Priority { get; set; }
     public ResponseProduct? Product { get; set; }
     public ResponseUser? AssignedTo { get; set; }
     public ResponseUser? ReviewedBy { get; set; }
