@@ -1,4 +1,3 @@
-using beethoven_api.Controllers;
 using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO;
@@ -7,7 +6,6 @@ using beethoven_api.Global.Engine;
 using beethoven_api.Global.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace beethoven_api.Controllers.JobControllers;
 

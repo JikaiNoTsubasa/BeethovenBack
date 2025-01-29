@@ -1,9 +1,11 @@
 using beethoven_api.Database;
 using beethoven_api.Global.Engine;
 using beethoven_api.Global.Query;
+using beethoven_api.Global.Token;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Net.Http.Headers;
 
 namespace beethoven_api.Controllers;
 
@@ -16,10 +18,12 @@ public class BeeController(BeeDBContext context, BeeEngine engine) : Controller
     protected long _loggedUserId;
 
     override public void OnActionExecuting(ActionExecutingContext context){
-        var headers = context.HttpContext.Request.Headers;
-        if (headers.ContainsKey("userId")){
-            headers.TryGetValue("userId", out var userIdStr);
-            _loggedUserId = long.Parse(userIdStr!);
+        string? bearer = context.HttpContext.Request.Headers[HeaderNames.Authorization];
+        
+        if (bearer is not null){
+            string token = bearer.Split(" ").Last();
+            var decodedToken = JWTUtils.DecodeJWTToken(JWTUtils.ConvertJWTStringToToken(token));
+            _loggedUserId = long.Parse(decodedToken.Claims?["user.id"] ?? "0");
         }
 
         var query = context.HttpContext.Request.Query;

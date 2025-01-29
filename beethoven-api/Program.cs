@@ -50,11 +50,11 @@ builder.Services.AddAuthentication(options =>{
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 .AddJwtBearer(options =>{
-    var keyByteArray = Encoding.UTF8.GetBytes(AuthConstants.JwtSecret);
-    var signinKey = new SymmetricSecurityKey(keyByteArray);
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthConstants.JwtSecret));
+    //var signinKey = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        ClockSkew = TimeSpan.Zero,
+        //ClockSkew = TimeSpan.Zero,
  
         ValidateAudience = true,
         ValidAudience = AuthConstants.JwtAudience,
@@ -62,11 +62,14 @@ builder.Services.AddAuthentication(options =>{
         ValidateIssuer = true,
         ValidIssuer = AuthConstants.JwtIssuer,
  
-        ValidateLifetime = true,
+        //ValidateLifetime = true,
  
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = signinKey
+        IssuerSigningKey = key,
     };
+    options.TokenValidationParameters.LogValidationExceptions = true;
+    options.TokenValidationParameters.LogTokenId = true;
+    options.MapInboundClaims = false;
 });
 
             
@@ -80,6 +83,8 @@ app.UseCors(x => x
             .AllowAnyHeader()
         );
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 // Create default data

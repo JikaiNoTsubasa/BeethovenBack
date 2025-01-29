@@ -32,4 +32,20 @@ public class JWTUtils
             new Claim("user.email", email!)
         ];
     }
+
+    public static JwtSecurityToken ConvertJWTStringToToken(string jwt) {
+        return new JwtSecurityTokenHandler().ReadJwtToken(jwt);
+    }
+
+    public static DecodedJWTToken DecodeJWTToken(JwtSecurityToken token) {
+        Dictionary<string, string> dict = [];
+        token.Claims.ToList().ForEach(c => dict.Add(c.Type, c.Value));
+
+        return new DecodedJWTToken{
+            Kid = token.Header.Kid,
+            Claims = dict,
+            Issuer = token.Issuer,
+            Audience = token.Audiences.FirstOrDefault()
+        };
+    }
 }
