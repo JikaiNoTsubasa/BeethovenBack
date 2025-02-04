@@ -6,18 +6,23 @@ using beethoven_api.Global.Engine;
 using beethoven_api.Global.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace beethoven_api.Controllers.JobControllers;
 
 [Authorize]
 public class UserController(BeeDBContext context, BeeEngine engine) : BeeController(context, engine)
 {
+    private IQueryable<User> GenerateUserQuery(){
+        return _context.Users
+            .Include(u=>u.Teams);
+        }
 
     [HttpGet]
     [Route("api/users")]
     public virtual IActionResult FetchUsers(){
         try{
-            var res =_context.Users
+            var res = GenerateUserQuery()
                 .Paged(_pagination, out QueryMeta? meta)
                 .Select(u=>u.ToDTO());
             return StatusCode(StatusCodes.Status200OK, res, meta);
@@ -30,7 +35,7 @@ public class UserController(BeeDBContext context, BeeEngine engine) : BeeControl
     [Route("api/myuser")]
     public virtual IActionResult FetchMyUser(){
         try{
-            var res =_context.Users.FirstOrDefault(u=>u.Id == _loggedUserId)?.ToDTO();
+            var res = GenerateUserQuery().FirstOrDefault(u=>u.Id == _loggedUserId)?.ToDTO();
             return StatusCode(StatusCodes.Status200OK, res);
         }catch(Exception e){
             return StatusCode(StatusCodes.Status500InternalServerError, e);
@@ -41,7 +46,7 @@ public class UserController(BeeDBContext context, BeeEngine engine) : BeeControl
     [Route("api/user/{id}")]
     public virtual IActionResult FetchUsers([FromRoute] long id){
         try{
-            var res =_context.Users
+            var res = GenerateUserQuery()
                 .FirstOrDefault(u=>u.Id == id)?
                 .ToDTO();
             return StatusCode(StatusCodes.Status200OK, res);

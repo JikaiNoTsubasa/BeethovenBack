@@ -2,6 +2,7 @@ using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO.CustomerModels;
 using beethoven_api.Database.DTO.ProductModels;
 using beethoven_api.Database.DTO.SLAModels;
+using beethoven_api.Database.DTO.TeamModels;
 using beethoven_api.Database.DTO.TicketModels;
 using beethoven_api.Database.DTO.UserModels;
 
@@ -24,7 +25,8 @@ public static class DTOHelper
             UpdatedById = model.UpdatedById,
             DeletedAt = model.DeletedAt,
             DeletedById = model.DeletedById,
-            Avatar = model.Avatar
+            Avatar = model.Avatar,
+            Teams = (model.Teams is not null && model.Teams.Count != 0) ? model.Teams?.Select(t=>t.ToDTOSimplified()).ToList() : []
         };
     }
 #endregion
@@ -123,6 +125,35 @@ public static class DTOHelper
     public static ResponseSLASimplified ToDTOSimplified(this SLA model){
         return new ResponseSLASimplified{
             Id = model.Id,
+            Name = model.Name
+        };
+    }
+#endregion
+
+#region 
+    public static ResponseTeam ToDTO(this Team model){
+        return new ResponseTeam{
+            Id = model.Id,
+            Name = model.Name,
+            CreatedAt = model.CreatedAt,
+            CreatedById = model.CreatedById,
+            UpdatedAt = model.UpdatedAt,
+            UpdatedById = model.UpdatedById,
+            DeletedAt = model.DeletedAt,
+            DeletedById = model.DeletedById,
+            Members = (model.Members is not null && model.Members.Count != 0) ? model.Members?.Select(u=>u.ToDTO()).ToList() : []
+        };
+    }
+
+    public static ResponseTeamSimplified ToDTOSimplified(this Team model){
+        return new ResponseTeamSimplified{
+            Id = model.Id,
+            CreatedAt = model.CreatedAt,
+            CreatedById = model.CreatedById,
+            UpdatedAt = model.UpdatedAt,
+            UpdatedById = model.UpdatedById,
+            DeletedAt = model.DeletedAt,
+            DeletedById = model.DeletedById,
             Name = model.Name
         };
     }

@@ -5,10 +5,13 @@ using beethoven_api.Database.DTO;
 using beethoven_api.Database.DTO.CustomerModels;
 using beethoven_api.Database.DTO.LoginModels;
 using beethoven_api.Database.DTO.ProductModels;
+using beethoven_api.Database.DTO.TeamModels;
 using beethoven_api.Database.DTO.TicketModels;
 using beethoven_api.Database.DTO.UserModels;
 using beethoven_api.Global.Security;
 using beethoven_api.Global.Token;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace beethoven_api.Global.Engine;
 
@@ -86,6 +89,24 @@ public class BeeEngine(BeeDBContext context)
         _context.Tickets.Add(ticket);
         _context.SaveChanges();
         return ticket;
+    }
+
+    public virtual Team CreateTeam(RequestCreateTeam model, long userId){
+        Team team = new(){
+            Name = model.Name,
+        };
+        team.MarkCreated(userId);
+        _context.Teams.Add(team);
+        _context.SaveChanges();
+        return team;
+    }
+
+    public virtual Team AddMemberToTeam(long teamId, long userId){
+        Team team = _context.Teams.Include(t=>t.Members).FirstOrDefault(t=>t.Id == teamId) ?? throw new Exception("Team not found");
+        User user = _context.Users.Include(u=>u.Teams).FirstOrDefault(u=>u.Id == userId) ?? throw new Exception("User not found");
+        team.Members!.Add(user);
+        _context.SaveChanges();
+        return team;
     }
 
     public virtual ResponseLogin LoginUser(string email, string password){
