@@ -18,6 +18,7 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
     public DbSet<TicketActivity> TicketActivities { get; set; }
     public DbSet<TicketType> TicketTypes { get; set; }
     public DbSet<Priority> Priorities { get; set; }
+    public DbSet<Team> Teams { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -76,6 +77,10 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .HasOne(u=>u.Preferences)
             .WithOne(p=>p.User)
             .HasForeignKey<Preferences>(p=>p.UserId).OnDelete(DeleteBehavior.Cascade);
+        
+        builder.Entity<Team>()
+            .HasMany(t=>t.Members)
+            .WithMany(u=>u.Teams);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

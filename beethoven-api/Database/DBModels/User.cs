@@ -11,4 +11,5 @@ public class User : Entity
     public string? Avatar { get; set; }
     public long PreferencesId { get; set; }
     public Preferences? Preferences { get; set; }
+    public List<Team>? Teams { get; set; }
 }
