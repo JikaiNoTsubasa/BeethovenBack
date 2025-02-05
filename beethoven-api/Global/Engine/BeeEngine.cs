@@ -23,6 +23,7 @@ public class BeeEngine(BeeDBContext context)
         User user = new(){
             Firstname = model.Firstname,
             Lastname = model.Lastname,
+            Name = model.Firstname + " " + model.Lastname,
             Email = model.Email,
             Password = BeeHash.GetHash(model.Password ?? "test"),
             Avatar = model.Avatar

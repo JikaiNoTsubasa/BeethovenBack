@@ -19,6 +19,7 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
     public DbSet<TicketType> TicketTypes { get; set; }
     public DbSet<Priority> Priorities { get; set; }
     public DbSet<Team> Teams { get; set; }
+    public DbSet<Message> Messages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -1,5 +1,6 @@
 using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO.CustomerModels;
+using beethoven_api.Database.DTO.MessageModels;
 using beethoven_api.Database.DTO.ProductModels;
 using beethoven_api.Database.DTO.SLAModels;
 using beethoven_api.Database.DTO.TeamModels;
@@ -155,6 +156,18 @@ public static class DTOHelper
             DeletedAt = model.DeletedAt,
             DeletedById = model.DeletedById,
             Name = model.Name
+        };
+    }
+#endregion
+
+#region Message
+    public static ResponseMessage ToDTO(this Message model){
+        return new ResponseMessage{
+            Id = model.Id,
+            Text = model.Text,
+            SourceUser = model.SourceUser.ToDTO(),
+            TargetUser = model.TargetUser.ToDTO(),
+            CreatedAt = model.CreatedAt
         };
     }
 #endregion
