@@ -165,6 +165,7 @@ public static class DTOHelper
         return new ResponseMessage{
             Id = model.Id,
             Text = model.Text,
+            IsRead = model.IsRead,
             SourceUser = model.SourceUser.ToDTO(),
             TargetUser = model.TargetUser.ToDTO(),
             CreatedAt = model.CreatedAt
