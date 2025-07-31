@@ -13,6 +13,8 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
     public DbSet<Preferences> Preferences { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<GlobalParameter> GlobalParameters { get; set; }
+    public DbSet<Document> Documents { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -35,10 +37,6 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .HasMany(u => u.Phases)
             .WithOne(t => t.Project)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Entity<Project>()
-            .HasOne(u => u.CurrentPhase)
-            .WithOne(t => t.Project);
 
         builder.Entity<Document>()
             .HasMany(d => d.Versions)

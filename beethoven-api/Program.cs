@@ -25,6 +25,9 @@ builder.Services.AddDbContext<BeeDBContext>();
 // Add managers
 builder.Services.AddScoped<UserManager>();
 builder.Services.AddScoped<AuthManager>();
+builder.Services.AddScoped<DocumentManager>();
+builder.Services.AddScoped<FileManager>();
+builder.Services.AddScoped<GlobalParameterManager>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -96,14 +99,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Create default data
-/*
-using (var scope = app.Services.CreateScope())
-{
-    using var context = scope.ServiceProvider.GetRequiredService<BeeDBContext>();
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<BeeDBContext>();
+BeeInitializer.InitGlobalParameters(context);
+BeeInitializer.CreateDefaultUser(context);
 
-    context.SaveChanges();
-
-}
-*/
 log.Info("Beethoven API started");
 app.Run();
