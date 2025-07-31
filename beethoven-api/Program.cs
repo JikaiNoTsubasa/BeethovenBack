@@ -1,9 +1,6 @@
 using beethoven_api.Database;
-using beethoven_api.Database.DBModels;
 using beethoven_api.Global;
 using beethoven_api.Global.Engine;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using log4net;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
@@ -11,13 +8,24 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using beethoven_api.Global.Token;
+using beethoven_api.Managers;
+using beethoven_api.JobManagers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Exception handler
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails(); // Required
 
 ILog log = LogManager.GetLogger(typeof(Program));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<BeeEngine>();
 builder.Services.AddDbContext<BeeDBContext>();
+
+// Add managers
+builder.Services.AddScoped<UserManager>();
+builder.Services.AddScoped<AuthManager>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

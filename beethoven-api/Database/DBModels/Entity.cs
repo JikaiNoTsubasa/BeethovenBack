@@ -8,6 +8,7 @@ public class Entity{
     public string? Name { get; set; }
     public DateTime? CreatedAt { get; set; }
     public long? CreatedById { get; set; }
+    public bool IsDeleted { get; set; }
     public DateTime? DeletedAt { get; set; }
     public long? DeletedById { get; set; }
     public DateTime? UpdatedAt { get; set; }
@@ -26,6 +27,7 @@ public class Entity{
     }
 
     public void MarkDeleted(long userId) {
+        IsDeleted = true;
         DeletedAt = DateTime.UtcNow;
         DeletedById = userId;
     }

@@ -35,6 +35,15 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .HasMany(u => u.Phases)
             .WithOne(t => t.Project)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Project>()
+            .HasOne(u => u.CurrentPhase)
+            .WithOne(t => t.Project);
+
+        builder.Entity<Document>()
+            .HasMany(d => d.Versions)
+            .WithOne(v => v.Document)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

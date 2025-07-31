@@ -7,12 +7,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Net.Http.Headers;
 
-namespace beethoven_api.Controllers;
+namespace beethoven_api.JobControllers;
 
-public class BeeController(BeeDBContext context, BeeEngine engine) : Controller
+[ApiController]
+public class BeeController : Controller
 {
-    protected readonly BeeDBContext _context = context;
-    protected readonly BeeEngine _engine = engine;
     protected QuerySearch? _search;
     protected QueryPagination? _pagination;
     protected long _loggedUserId;

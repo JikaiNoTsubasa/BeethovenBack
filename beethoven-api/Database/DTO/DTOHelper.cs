@@ -1,10 +1,7 @@
 using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO.CustomerModels;
 using beethoven_api.Database.DTO.MessageModels;
-using beethoven_api.Database.DTO.ProductModels;
-using beethoven_api.Database.DTO.SLAModels;
 using beethoven_api.Database.DTO.TeamModels;
-using beethoven_api.Database.DTO.TicketModels;
 using beethoven_api.Database.DTO.UserModels;
 
 namespace beethoven_api.Database.DTO;
@@ -26,8 +23,7 @@ public static class DTOHelper
             UpdatedById = model.UpdatedById,
             DeletedAt = model.DeletedAt,
             DeletedById = model.DeletedById,
-            Avatar = model.Avatar,
-            Teams = (model.Teams is not null && model.Teams.Count != 0) ? model.Teams?.Select(t=>t.ToDTOSimplified()).ToList() : []
+            Avatar = model.Avatar
         };
     }
 #endregion
@@ -38,8 +34,7 @@ public static class DTOHelper
             Name = model.Name,
             ContactEmail = model.ContactEmail,
             ContactPhone = model.ContactPhone,
-            Comment = model.Comment,
-            Products = (model.Products is not null && model.Products.Count != 0) ? model.Products?.Select(p=>p.ToDTO()).ToList() : []
+            Comment = model.Comment
         };
     }
     public static ResponseCustomerSimplified ToDTOSimplified(this Customer model){
@@ -49,84 +44,6 @@ public static class DTOHelper
             ContactEmail = model.ContactEmail,
             ContactPhone = model.ContactPhone,
             Comment = model.Comment
-        };
-    }
-#endregion
-#region Ticket
-    public static ResponseTicket ToDTO(this Ticket model){
-        return new ResponseTicket{
-            Id = model.Id,
-            Name = model.Name,
-            Status = model.Status?.ToDTO(),
-            CreatedAt = model.CreatedAt,
-            UpdatedAt = model.UpdatedAt,
-            AssignedTo = model.AssignedTo?.ToDTO(),
-            ReviewedBy = model.ReviewedBy?.ToDTO(),
-            Description = model.Description,
-            Product = model.Product?.ToDTO(),
-            GitlabTicketId = model.GitlabTicketId,
-            Activities = (model.Activities is not null && model.Activities.Count != 0) ? model.Activities?.Select(a=>a.ToDTO()).ToList() : [],
-            Type = model.Type?.ToDTO(),
-            Priority = model.Priority?.ToDTO()
-        };
-    }
-
-    public static ResponseTicketStatus ToDTO(this TicketStatus model){
-        return new ResponseTicketStatus{
-            Id = model.Id,
-            Name = model.Name
-        };
-    }
-
-    public static ResponseTicketActivity ToDTO(this TicketActivity model){
-        return new ResponseTicketActivity{
-            Id = model.Id,
-            User = model.User?.ToDTO(),
-            Message = model.Message,
-            CreatedAt = model.CreatedAt
-        };
-    }
-
-    public static ResponseTicketType ToDTO(this TicketType model){
-        return new ResponseTicketType{
-            Id = model.Id,
-            Name = model.Name,
-            Description = model.Description
-        };
-    }
-
-    public static ResponsePriority ToDTO(this Priority model){
-        return new ResponsePriority{
-            Id = model.Id,
-            Name = model.Name,
-            Description = model.Description
-        };
-    }
-#endregion
-#region Product
-    public static ResponseProduct ToDTO(this Product model){
-        return new ResponseProduct{
-            Id = model.Id,
-            Name = model.Name,
-            SLA = model.SLA?.ToDTOSimplified(),
-            Customer = model.Customer?.ToDTOSimplified(),
-            CodeBaseLink = model.CodeBaseLink
-        };
-    }
-#endregion
-#region SLA
-    public static ResponseSLA ToDTO(this SLA model){
-        return new ResponseSLA{
-            Id = model.Id,
-            Name = model.Name,
-            Products = (model.Products is not null && model.Products.Count != 0) ? model.Products?.Select(p=>p.ToDTO()).ToList() : []
-        };
-    }
-
-    public static ResponseSLASimplified ToDTOSimplified(this SLA model){
-        return new ResponseSLASimplified{
-            Id = model.Id,
-            Name = model.Name
         };
     }
 #endregion
