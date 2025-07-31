@@ -15,7 +15,7 @@ public class BeeDBContextFactory : IDesignTimeDbContextFactory<BeeDBContext>
 
         string centralConnectionString = Config.GetConnectionString("Default") ?? "";
 
-        optionsBuilder.UseMySql(centralConnectionString, ServerVersion.AutoDetect(centralConnectionString));
+        optionsBuilder.UseNpgsql(centralConnectionString);
 
         return new BeeDBContext(optionsBuilder.Options);
     }

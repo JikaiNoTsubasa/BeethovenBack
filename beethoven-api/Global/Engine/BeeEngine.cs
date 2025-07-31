@@ -47,51 +47,6 @@ public class BeeEngine(BeeDBContext context)
         return customer;
     }
 
-    public virtual Product CreateProduct(RequestCreateProduct model, long userId){
-        Product product = new(){
-            Name = model.Name,
-            SLAId = model.SLAId,
-            CustomerId = model.CustomerId
-        };
-        product.MarkCreated(userId);
-        _context.Products.Add(product);
-        _context.SaveChanges();
-        return product;
-    }
-
-    public virtual Ticket CreateTicket(RequestCreateTicket model, long userId){
-        Ticket ticket = new(){
-            Name = model.Name,
-            Description = model.Description,
-            ProductId = model.ProductId,
-            AssignedToId = model.AssignedToId,
-            ReviewedById = model.ReviewedById,
-            GitlabTicketId = model.GitlabTicketId,
-            TypeId = model.TypeId,
-            PriorityId = model.PriorityId
-        };
-        if (model.StatusId is not null){
-            ticket.StatusId = model.StatusId;
-        }else if (model.AssignedToId is not null){
-            ticket.StatusId = 2;
-        }else{
-            ticket.StatusId = 1;
-        }
-        ticket.MarkCreated(userId);
-
-        TicketActivity activity = new(){
-            TicketId = ticket.Id,
-            UserId = userId,
-            Message = "Ticket created",
-            CreatedAt = DateTime.UtcNow  
-        };
-        ticket.Activities = [];
-        ticket.Activities.Add(activity);
-        _context.Tickets.Add(ticket);
-        _context.SaveChanges();
-        return ticket;
-    }
-
     public virtual Team CreateTeam(RequestCreateTeam model, long userId){
         Team team = new(){
             Name = model.Name,

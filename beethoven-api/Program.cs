@@ -55,20 +55,20 @@ builder.Services.AddAuthentication(options =>{
     options.TokenValidationParameters = new TokenValidationParameters
     {
         //ClockSkew = TimeSpan.Zero,
- 
+
         ValidateAudience = true,
         ValidAudience = AuthConstants.JwtAudience,
- 
+
         ValidateIssuer = true,
         ValidIssuer = AuthConstants.JwtIssuer,
- 
+
         //ValidateLifetime = true,
- 
+
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = key,
+        LogValidationExceptions = true,
+        LogTokenId = true
     };
-    options.TokenValidationParameters.LogValidationExceptions = true;
-    options.TokenValidationParameters.LogTokenId = true;
     options.MapInboundClaims = false;
 });
 
@@ -88,76 +88,14 @@ app.UseAuthorization();
 app.MapControllers();
 
 // Create default data
-using (var scope = app.Services.CreateScope()){
+/*
+using (var scope = app.Services.CreateScope())
+{
     using var context = scope.ServiceProvider.GetRequiredService<BeeDBContext>();
 
-    // Create ticket statuses
-    List<TicketStatus> statuses = [.. context.TicketStatuses];
-
-    if (!statuses.Any(s=>s.Name!.Equals("New"))){
-        context.TicketStatuses.Add(new TicketStatus{Id = 1,Name = "New"});
-    }
-    if (!statuses.Any(s=>s.Name!.Equals("Assigned"))){
-        context.TicketStatuses.Add(new TicketStatus{Id = 2,Name = "Assigned"});
-    }
-    if (!statuses.Any(s=>s.Name!.Equals("InReview"))){
-        context.TicketStatuses.Add(new TicketStatus{Id = 3,Name = "InReview"});
-    }
-    if (!statuses.Any(s=>s.Name!.Equals("OnHold"))){
-        context.TicketStatuses.Add(new TicketStatus{Id = 4,Name = "OnHold"});
-    }
-    if (!statuses.Any(s=>s.Name!.Equals("Closed (Won't Fix)"))){
-        context.TicketStatuses.Add(new TicketStatus{Id = 5,Name = "Closed (Won't Fix)"});
-    }
-    if (!statuses.Any(s=>s.Name!.Equals("Closed (Fixed)"))){
-        context.TicketStatuses.Add(new TicketStatus{Id = 6,Name = "Closed (Fixed)"});
-    }
     context.SaveChanges();
 
-    // Create SLAs
-    List<SLA> slas = [.. context.SLAs];
-
-    if (!slas.Any(s=>s.Name!.Equals("Low"))){
-        context.SLAs.Add(new SLA{Name = "Low"});
-    }
-    if (!slas.Any(s=>s.Name!.Equals("Medium"))){
-        context.SLAs.Add(new SLA{Name = "Medium"});
-    }
-    if (!slas.Any(s=>s.Name!.Equals("High"))){
-        context.SLAs.Add(new SLA{Name = "High"});
-    }
-    context.SaveChanges();
-
-    // Create Ticket Types
-    List<TicketType> types = [.. context.TicketTypes];
-
-    if (!types.Any(s=>s.Name!.Equals("Incident"))){
-        context.TicketTypes.Add(new TicketType{Id = 1, Name = "Incident", Description = "An unplanned interruption to an IT service."});
-    }
-    if (!types.Any(s=>s.Name!.Equals("Problem"))){
-        context.TicketTypes.Add(new TicketType{Id = 2, Name = "Problem", Description = "The underlying cause of one or more incidents."});
-    }
-    if (!types.Any(s=>s.Name!.Equals("Change Request"))){
-        context.TicketTypes.Add(new TicketType{Id = 3, Name = "Change Request", Description = "A formal proposal for a change to IT services."});
-    }
-    if (!types.Any(s=>s.Name!.Equals("Service Request"))){
-        context.TicketTypes.Add(new TicketType{Id = 4, Name = "Service Request", Description = "A request for information, advice, or access to a service."});
-    }
-
-    // Create priorities
-    List<Priority> priorities = [.. context.Priorities];
-
-    if (!priorities.Any(s=>s.Name!.Equals("High"))){
-        context.Priorities.Add(new Priority{Id = 1, Name = "High"});
-    }
-    if (!priorities.Any(s=>s.Name!.Equals("Medium"))){
-        context.Priorities.Add(new Priority{Id = 2, Name = "Medium"});
-    }
-    if (!priorities.Any(s=>s.Name!.Equals("Low"))){
-        context.Priorities.Add(new Priority{Id = 3, Name = "Low"});
-    }
-    context.SaveChanges();
 }
-
+*/
 log.Info("Beethoven API started");
 app.Run();

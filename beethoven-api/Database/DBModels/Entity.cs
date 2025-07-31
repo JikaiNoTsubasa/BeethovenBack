@@ -12,8 +12,10 @@ public class Entity{
     public long? DeletedById { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public long? UpdatedById { get; set; }
+    public List<Customer>? Customers { get; set; }
 
-    public void MarkCreated(long userId) {
+    public void MarkCreated(long userId)
+    {
         CreatedAt = DateTime.UtcNow;
         CreatedById = userId;
     }
