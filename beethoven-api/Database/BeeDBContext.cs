@@ -15,6 +15,8 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
     public DbSet<Message> Messages { get; set; }
     public DbSet<GlobalParameter> GlobalParameters { get; set; }
     public DbSet<Document> Documents { get; set; }
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<ProjectPhase> ProjectPhases { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

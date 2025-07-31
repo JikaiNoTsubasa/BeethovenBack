@@ -1,0 +1,109 @@
+using System;
+using beethoven_api.Database;
+using beethoven_api.Database.DBModels;
+using Lucene.Net.Index;
+using Microsoft.EntityFrameworkCore;
+
+namespace beethoven_api.JobManagers;
+
+public class ProjectManager(BeeDBContext context) : BeeManager(context)
+{
+
+    public Project CreateProject(string name, long userId, bool? initializePhases = null)
+    {
+        Project prj = new()
+        {
+            Name = name
+        };
+
+        prj.MarkCreated(userId);
+
+        _context.Projects.Add(prj);
+        _context.SaveChanges();
+
+        if (initializePhases is not null && initializePhases.Value)
+        {
+            CreateDefaultPhases(prj);
+        }
+
+        return prj;
+    }
+
+    public void CreateDefaultPhases(Project project)
+    {
+        ProjectPhase p1 = new()
+        {
+            Name = "Initialisation",
+            Project = project
+        };
+        _context.ProjectPhases.Add(p1);
+        _context.SaveChanges();
+
+        ProjectPhase p2 = new()
+        {
+            Name = "Préparation",
+            Project = project
+        };
+        _context.ProjectPhases.Add(p2);
+        _context.SaveChanges();
+
+        ProjectPhase p3 = new()
+        {
+            Name = "Réalisation",
+            Project = project
+        };
+        _context.ProjectPhases.Add(p3);
+        _context.SaveChanges();
+
+        ProjectPhase p4 = new()
+        {
+            Name = "Cloture",
+            Project = project
+        };
+        _context.ProjectPhases.Add(p4);
+        _context.SaveChanges();
+
+        ProjectPhase p5 = new()
+        {
+            Name = "Archivage",
+            Project = project
+        };
+        _context.ProjectPhases.Add(p5);
+        _context.SaveChanges();
+
+        p1.NextPhase = p2;
+        p2.NextPhase = p3;
+        p3.NextPhase = p4;
+        p4.NextPhase = p5;
+        p2.PreviousPhase = p1;
+        p3.PreviousPhase = p2;
+        p4.PreviousPhase = p3;
+        p5.PreviousPhase = p4;
+        _context.SaveChanges();
+    }
+
+    private IQueryable<Project> GenerateProjectQuery()
+    {
+        return _context.Projects.Include(p => p.Phases);
+    }
+
+    public Project FetchProject(long id)
+    {
+        return GenerateProjectQuery().FirstOrDefault(p => p.Id == id) ?? throw new Exception("Project not found");
+    }
+
+    public List<ProjectPhase> FetchProjectPhases(long id)
+    {
+        var phases = GenerateProjectQuery().FirstOrDefault(p => p.Id == id)?.Phases ?? [];
+        var first = phases.FirstOrDefault(p => p.PreviousPhaseId == null);
+        if (first == null) return [];
+        var orderedPhases = new List<ProjectPhase>();
+        var current = first;
+        while (current != null)
+        {
+            orderedPhases.Add(current);
+            current = phases.FirstOrDefault(p => p.PreviousPhaseId == current.Id);
+        }
+        return orderedPhases;
+    }
+}

@@ -13,6 +13,10 @@ using beethoven_api.JobManagers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add log4net
+builder.Logging.ClearProviders();
+builder.Logging.AddLog4Net("log4net.config");
+
 // Exception handler
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails(); // Required
@@ -28,6 +32,7 @@ builder.Services.AddScoped<AuthManager>();
 builder.Services.AddScoped<DocumentManager>();
 builder.Services.AddScoped<FileManager>();
 builder.Services.AddScoped<GlobalParameterManager>();
+builder.Services.AddScoped<ProjectManager>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
