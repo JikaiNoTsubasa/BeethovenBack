@@ -10,4 +10,5 @@ public class User : Entity
     public long PreferencesId { get; set; }
     public Preferences? Preferences { get; set; }
     public List<Team>? Teams { get; set; }
+    public List<ProjectPermission>? Permissions { get; set; }
 }

@@ -35,4 +35,12 @@ public class ProjectController(ProjectManager manager) : BeeController
         var phases = _manager.FetchProjectPhases(id).Select(p => p.ToDTO()).ToList();
         return StatusCode(StatusCodes.Status201Created, phases);
     }
+
+    [HttpGet]
+    [Route("api/my-projects")]
+    public IActionResult FetchMyProjects()
+    {
+        var projects = _manager.FetchProjectsForUser(_loggedUserId).Select(p => p.ToDTO()).ToList();
+        return StatusCode(StatusCodes.Status200OK, projects);
+    }
 }

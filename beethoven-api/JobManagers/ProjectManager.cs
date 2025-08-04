@@ -26,6 +26,16 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
             CreateDefaultPhases(prj);
         }
 
+        // Create default permissions
+        ProjectPermission p1 = new()
+        {
+            ProjectId = prj.Id,
+            UserId = userId
+        };
+        p1.SetAllPermissions(true);
+        _context.ProjectPermissions.Add(p1);
+        _context.SaveChanges();
+
         return prj;
     }
 
@@ -36,6 +46,7 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
             Name = "Initialisation",
             Project = project
         };
+        project.CurrentPhase = p1;
         _context.ProjectPhases.Add(p1);
         _context.SaveChanges();
 
@@ -84,7 +95,7 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
 
     private IQueryable<Project> GenerateProjectQuery()
     {
-        return _context.Projects.Include(p => p.Phases);
+        return _context.Projects.Include(p => p.Phases).Include(p => p.Permissions);
     }
 
     public Project FetchProject(long id)
@@ -105,5 +116,13 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
             current = phases.FirstOrDefault(p => p.PreviousPhaseId == current.Id);
         }
         return orderedPhases;
+    }
+
+    public List<Project> FetchProjectsForUser(long userId)
+    {
+        List<Project> projects = [..GenerateProjectQuery()
+            .Where(p => p.Permissions!.Any(p => p.UserId == userId && p.CanRead == true))
+        ];
+        return projects;
     }
 }

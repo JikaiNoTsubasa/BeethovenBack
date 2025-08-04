@@ -17,6 +17,7 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
     public DbSet<Document> Documents { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectPhase> ProjectPhases { get; set; }
+    public DbSet<ProjectPermission> ProjectPermissions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -31,6 +32,10 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .WithOne(p => p.User)
             .HasForeignKey<Preferences>(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
 
+        builder.Entity<User>()
+            .HasMany(u => u.Permissions)
+            .WithOne(t => t.User);
+
         builder.Entity<Team>()
             .HasMany(t => t.Members)
             .WithMany(u => u.Teams);
@@ -39,6 +44,10 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .HasMany(u => u.Phases)
             .WithOne(t => t.Project)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Project>()
+            .HasMany(u => u.Permissions)
+            .WithOne(t => t.Project);
 
         builder.Entity<Document>()
             .HasMany(d => d.Versions)
