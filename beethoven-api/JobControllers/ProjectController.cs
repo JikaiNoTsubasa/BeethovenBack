@@ -16,7 +16,9 @@ public class ProjectController(ProjectManager manager) : BeeController
     [Route("api/projects")]
     public IActionResult CreateProject([FromBody] RequestCreateProject model)
     {
-        var prj = _manager.CreateProject(model.Name, _loggedUserId, model.InitializePhases).ToDTO();
+        long ownerId = _loggedUserId;
+        if (model.OwnerId.HasValue) ownerId = model.OwnerId.Value;
+        var prj = _manager.CreateProject(model.Name, ownerId, _loggedUserId, model.InitializePhases).ToDTO();
         return StatusCode(StatusCodes.Status201Created, prj);
     }
 
@@ -45,6 +47,14 @@ public class ProjectController(ProjectManager manager) : BeeController
     }
 
     [HttpGet]
+    [Route("api/my-projects/{id}")]
+    public IActionResult FetchMyProjects([FromRoute] long id)
+    {
+        var project = _manager.FetchProjectForUser(id, _loggedUserId)?.ToDTO();
+        return StatusCode(StatusCodes.Status200OK, project);
+    }
+
+    [HttpGet]
     [Route("api/my-projects/{id}/permissions")]
     public IActionResult FetchMyProjectPermissions([FromRoute] long id)
     {
@@ -58,6 +68,14 @@ public class ProjectController(ProjectManager manager) : BeeController
     {
         var permissions = _manager.FetchProjectPermissions(id).Select(p => p.ToDTO()).ToList();
         return StatusCode(StatusCodes.Status200OK, permissions);
+    }
+
+    [HttpGet]
+    [Route("api/projects/{id}/documents")]
+    public IActionResult FetchProjectDocuments([FromRoute] long id)
+    {
+        var documents = _manager.FetchProjectDocuments(id).Select(p => p.ToDTO()).ToList();
+        return StatusCode(StatusCodes.Status200OK, documents);
     }
 
 

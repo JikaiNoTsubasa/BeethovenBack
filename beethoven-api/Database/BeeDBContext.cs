@@ -33,6 +33,10 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .HasForeignKey<Preferences>(p => p.UserId).OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<User>()
+            .HasMany(u => u.Projects)
+            .WithOne(p => p.Owner);
+
+        builder.Entity<User>()
             .HasMany(u => u.Permissions)
             .WithOne(t => t.User);
 

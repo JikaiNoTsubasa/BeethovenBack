@@ -7,4 +7,5 @@ public record class RequestCreateProject
     [Required]
     public string Name { get; set; } = null!;
     public bool? InitializePhases { get; set; }
+    public long? OwnerId { get; set; } = null;
 }

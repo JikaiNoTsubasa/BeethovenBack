@@ -1,5 +1,6 @@
 using beethoven_api.Database.DBModels;
 using beethoven_api.Database.DTO.CustomerModels;
+using beethoven_api.Database.DTO.DocumentModel;
 using beethoven_api.Database.DTO.MessageModels;
 using beethoven_api.Database.DTO.ProjectModels;
 using beethoven_api.Database.DTO.TeamModels;
@@ -20,6 +21,9 @@ public static class DTOHelper
             Lastname = model.Lastname,
             Name = model.Firstname + " " + model.Lastname,
             Email = model.Email,
+            CanLogin = model.CanLogin,
+            LastConnection = model.Lastconnection,
+            IsDeleted = model.IsDeleted,
             CreatedAt = model.CreatedAt,
             CreatedById = model.CreatedById,
             UpdatedAt = model.UpdatedAt,
@@ -109,6 +113,8 @@ public static class DTOHelper
         {
             Id = model.Id,
             Name = model.Name,
+            OwnerId = model.OwnerId,
+            OwnerName = model.Owner?.Name,
             CreatedAt = model.CreatedAt,
             CreatedById = model.CreatedById,
             UpdatedAt = model.UpdatedAt,
@@ -138,6 +144,29 @@ public static class DTOHelper
             CanRead = model.CanRead,
             CanUpdate = model.CanUpdate,
             CanCreateIssues = model.CanCreateIssues
+        };
+    }
+    #endregion
+
+    #region Document
+    public static ResponseDocument ToDTO(this Document model)
+    {
+        return new ResponseDocument
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Version = model.CurrentVersion.Version,
+            VersionId = model.CurrentVersion.Id,
+            Path = model.CurrentVersion.Path,
+            IsDeleted = model.IsDeleted,
+            CreatedAt = model.CreatedAt,
+            CreatedById = model.CreatedById,
+            UpdatedAt = model.UpdatedAt,
+            UpdatedById = model.UpdatedById,
+            DeletedAt = model.DeletedAt,
+            DeletedById = model.DeletedById,
+            EntityId = model.EntityId,
+            EntityName = model.Entity?.Name
         };
     }
     #endregion

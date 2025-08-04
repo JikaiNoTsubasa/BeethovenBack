@@ -6,9 +6,12 @@ public class User : Entity
     public string? Firstname { get; set; }
     public string? Lastname { get; set; }
     public string? Password { get; set; }
+    public DateTime? Lastconnection { get; set; }
+    public bool CanLogin { get; set; }
     public string? Avatar { get; set; }
     public long PreferencesId { get; set; }
     public Preferences? Preferences { get; set; }
     public List<Team>? Teams { get; set; }
     public List<ProjectPermission>? Permissions { get; set; }
+    public List<Project>? Projects { get; set; }
 }

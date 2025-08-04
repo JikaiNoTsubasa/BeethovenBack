@@ -1,9 +1,7 @@
 using System;
-using System.Linq;
 using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
 using beethoven_api.Global.Query;
-using Lucene.Net.Index;
 using Microsoft.EntityFrameworkCore;
 
 namespace beethoven_api.JobManagers;
@@ -11,11 +9,12 @@ namespace beethoven_api.JobManagers;
 public class ProjectManager(BeeDBContext context) : BeeManager(context)
 {
 
-    public Project CreateProject(string name, long userId, bool? initializePhases = null)
+    public Project CreateProject(string name, long ownerId, long userId, bool? initializePhases = null)
     {
         Project prj = new()
         {
-            Name = name
+            Name = name,
+            OwnerId = ownerId
         };
 
         prj.MarkCreated(userId);
@@ -32,7 +31,7 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
         ProjectPermission p1 = new()
         {
             ProjectId = prj.Id,
-            UserId = userId
+            UserId = ownerId
         };
         p1.SetAllPermissions(true);
         _context.ProjectPermissions.Add(p1);
@@ -97,7 +96,11 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
 
     private IQueryable<Project> GenerateProjectQuery()
     {
-        return _context.Projects.Include(p => p.Phases).Include(p => p.Permissions);
+        return _context.Projects
+            .Include(p => p.Phases)
+            .Include(p => p.Permissions)
+            .Include(p => p.Owner)
+            ;
     }
 
     public Project FetchProject(long id)
@@ -128,11 +131,26 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
         return projects;
     }
 
+    public Project? FetchProjectForUser(long projectId, long userId)
+    {
+        Project? project = GenerateProjectQuery()
+        .FirstOrDefault(p => p.Id == projectId && p.Permissions!.Any(p => p.UserId == userId && p.CanRead == true));
+        return project;
+    }
+
     public List<ProjectPermission> FetchProjectPermissions(long projectId, long? userId = null)
     {
         return [.._context.ProjectPermissions
             .Where(p => p.ProjectId == projectId)
             .Where(userId is not null, p => p.UserId == userId)
+            ];
+    }
+
+    public List<Document> FetchProjectDocuments(long projectId)
+    {
+        return [.._context.Documents
+            .Include(d => d.Versions)
+            .Where(d => d.EntityId == projectId)
             ];
     }
 }
