@@ -43,4 +43,22 @@ public class ProjectController(ProjectManager manager) : BeeController
         var projects = _manager.FetchProjectsForUser(_loggedUserId).Select(p => p.ToDTO()).ToList();
         return StatusCode(StatusCodes.Status200OK, projects);
     }
+
+    [HttpGet]
+    [Route("api/my-projects/{id}/permissions")]
+    public IActionResult FetchMyProjectPermissions([FromRoute] long id)
+    {
+        var permissions = _manager.FetchProjectPermissions(id, _loggedUserId).Select(p => p.ToDTO()).ToList();
+        return StatusCode(StatusCodes.Status200OK, permissions);
+    }
+
+    [HttpGet]
+    [Route("api/projects/{id}/permissions")]
+    public IActionResult FetchProjectPermissions([FromRoute] long id)
+    {
+        var permissions = _manager.FetchProjectPermissions(id).Select(p => p.ToDTO()).ToList();
+        return StatusCode(StatusCodes.Status200OK, permissions);
+    }
+
+
 }

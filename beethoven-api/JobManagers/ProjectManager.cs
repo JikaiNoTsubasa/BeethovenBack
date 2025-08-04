@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using beethoven_api.Database;
 using beethoven_api.Database.DBModels;
+using beethoven_api.Global.Query;
 using Lucene.Net.Index;
 using Microsoft.EntityFrameworkCore;
 
@@ -124,5 +126,13 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
             .Where(p => p.Permissions!.Any(p => p.UserId == userId && p.CanRead == true))
         ];
         return projects;
+    }
+
+    public List<ProjectPermission> FetchProjectPermissions(long projectId, long? userId = null)
+    {
+        return [.._context.ProjectPermissions
+            .Where(p => p.ProjectId == projectId)
+            .Where(userId is not null, p => p.UserId == userId)
+            ];
     }
 }

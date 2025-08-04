@@ -11,20 +11,20 @@ namespace beethoven_api.JobManagers;
 public class AuthManager(BeeDBContext context) : BeeManager(context)
 {
     public virtual ResponseLogin LoginUser(string email, string password){
-        string hashedPassword = BeeHash.GetHash(password);
-        User? user = _context.Users.FirstOrDefault(u=>u.Email == email && u.Password!.Equals(hashedPassword));
-
-
-        bool isLogged = user is not null;
-
+        User? user = _context.Users.FirstOrDefault(u=>u.Email!.Equals(email));
         if (user is null) return new(){ IsLogged = false };
 
-        var bearer = AuthorizationToken.GenerateBearer(user, AuthConstants.JwtSecret);
+        if (BeeHash.ValidateHash(password, user.Password!))
+        {
+            var bearer = AuthorizationToken.GenerateBearer(user, AuthConstants.JwtSecret);
 
-        return new(){
-            User = user?.ToDTO(),
-            AccessToken = bearer,
-            IsLogged = isLogged
-            };
+            return new(){
+                User = user?.ToDTO(),
+                AccessToken = bearer,
+                IsLogged = true
+                };
+            
+        }
+        return new(){ IsLogged = false };
     }
 }

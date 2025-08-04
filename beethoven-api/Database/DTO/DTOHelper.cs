@@ -128,5 +128,17 @@ public static class DTOHelper
             NextPhaseId = model.NextPhaseId
         };
     }
+
+    public static ResponseProjectPermission ToDTO(this ProjectPermission model)
+    {
+        return new ResponseProjectPermission
+        {
+            UserId = model.UserId,
+            ProjectId = model.ProjectId,
+            CanRead = model.CanRead,
+            CanUpdate = model.CanUpdate,
+            CanCreateIssues = model.CanCreateIssues
+        };
+    }
     #endregion
 }
