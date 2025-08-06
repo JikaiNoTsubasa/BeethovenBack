@@ -123,6 +123,7 @@ public static class DTOHelper
             DeletedById = model.DeletedById,
             CustomerId = model.CustomerId,
             CustomerName = model.Customer?.Name,
+            CurrentPhaseId = model.CurrentPhaseId
         };
     }
 

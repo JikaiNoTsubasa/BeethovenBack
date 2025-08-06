@@ -8,4 +8,5 @@ public record class RequestCreateProject
     public string Name { get; set; } = null!;
     public bool? InitializePhases { get; set; }
     public long? OwnerId { get; set; } = null;
+    public long? CustomerId { get; set; }
 }

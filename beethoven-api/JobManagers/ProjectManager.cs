@@ -9,7 +9,7 @@ namespace beethoven_api.JobManagers;
 public class ProjectManager(BeeDBContext context) : BeeManager(context)
 {
 
-    public Project CreateProject(string name, long ownerId, long userId, bool? initializePhases = null)
+    public Project CreateProject(string name, long ownerId, long userId, bool? initializePhases = null, long? customerId = null)
     {
         Project prj = new()
         {
@@ -25,6 +25,11 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
         if (initializePhases is not null && initializePhases.Value)
         {
             CreateDefaultPhases(prj);
+        }
+
+        if (customerId.HasValue)
+        {
+            prj.CustomerId = customerId.Value;
         }
 
         // Create default permissions

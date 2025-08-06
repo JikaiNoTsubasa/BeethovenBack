@@ -18,7 +18,7 @@ public class ProjectController(ProjectManager manager) : BeeController
     {
         long ownerId = _loggedUserId;
         if (model.OwnerId.HasValue) ownerId = model.OwnerId.Value;
-        var prj = _manager.CreateProject(model.Name, ownerId, _loggedUserId, model.InitializePhases).ToDTO();
+        var prj = _manager.CreateProject(model.Name, ownerId, _loggedUserId, model.InitializePhases, model.CustomerId).ToDTO();
         return StatusCode(StatusCodes.Status201Created, prj);
     }
 
