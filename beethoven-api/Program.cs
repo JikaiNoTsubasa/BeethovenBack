@@ -33,6 +33,7 @@ builder.Services.AddScoped<DocumentManager>();
 builder.Services.AddScoped<FileManager>();
 builder.Services.AddScoped<GlobalParameterManager>();
 builder.Services.AddScoped<ProjectManager>();
+builder.Services.AddScoped<CustomerManager>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

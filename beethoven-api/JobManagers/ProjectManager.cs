@@ -100,6 +100,8 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
             .Include(p => p.Phases)
             .Include(p => p.Permissions)
             .Include(p => p.Owner)
+            .Include(p => p.CurrentPhase)
+            .Include(p => p.Customer)
             ;
     }
 

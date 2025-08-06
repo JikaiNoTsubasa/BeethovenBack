@@ -4,4 +4,6 @@ public record class ResponseProject : ResponseEntity
 {
     public long? OwnerId { get; set; }
     public string? OwnerName { get; set; }
+    public long? CustomerId { get; set; }
+    public string? CustomerName { get; set; }
 }

@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace beethoven_api.Database.DBModels;
 
@@ -12,4 +14,10 @@ public class DocumentVersion
     public string Version { get; set; } = null!;
     public string Path { get; set; } = null!;
     public bool IsCurrent { get; set; }
+    public DocumentStatus Status { get; set; }
+
+    [ForeignKey(nameof(CheckedOutBy))]
+    public long? CheckedOutById { get; set; }
+    public User? CheckedOutBy { get; set; }
+    public DateTime? CheckedOutAt { get; set; }
 }

@@ -8,4 +8,5 @@ public class Customer : Entity
     public string? ContactPhone { get; set; }
     public string? Comment { get; set; }
     public List<User>? Members { get; set; }
+    public List<Project>? Projects { get; set; }
 }

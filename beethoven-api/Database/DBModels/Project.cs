@@ -12,6 +12,10 @@ public class Project : Entity
     public ProjectPhase? CurrentPhase { get; set; }
     public List<ProjectPermission>? Permissions { get; set; }
 
+    [ForeignKey(nameof(Customer))]
+    public long? CustomerId { get; set; }
+    public Customer? Customer { get; set; }
+
     [ForeignKey(nameof(Owner))]
     public long? OwnerId { get; set; }
     public User? Owner { get; set; }
