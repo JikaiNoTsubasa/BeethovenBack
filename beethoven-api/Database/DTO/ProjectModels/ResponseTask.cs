@@ -13,6 +13,9 @@ public record class ResponseTask : ResponseEntity
     public int EstimatedMinutes { get; set; }
     public Priority Priority { get; set; }
     public DBModels.TaskStatus Status { get; set; }
+    public TaskType Type { get; set; }
     public long? PhaseId { get; set; }
     public long? ProjectId { get; set; }
+    public long? ParentTaskId { get; set; }
+    public List<long>? SubTaskIds { get; set; }
 }

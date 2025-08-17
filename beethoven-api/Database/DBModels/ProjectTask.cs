@@ -13,6 +13,7 @@ public class ProjectTask : Entity
     public int EstimatedMinutes { get; set; }
     public Priority Priority { get; set; } = Priority.LOW;
     public TaskStatus Status { get; set; } = TaskStatus.TODO;
+    public TaskType Type { get; set; }
 
     [ForeignKey(nameof(Project))]
     public long? ProjectId { get; set; }

@@ -169,6 +169,9 @@ public static class DTOHelper
             Assignees = model.Assignees?.Select(u => u.ToDTO()).ToList(),
             EstimatedMinutes = model.EstimatedMinutes,
             PhaseId = model.PhaseId,
+            ParentTaskId = model.ParentTaskId,
+            SubTaskIds = model.SubTasks?.Select(t => t.Id).ToList(),
+            Type = model.Type,
 
             IsDeleted = model.IsDeleted,
             CreatedAt = model.CreatedAt,
