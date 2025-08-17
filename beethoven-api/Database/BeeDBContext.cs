@@ -18,6 +18,7 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectPhase> ProjectPhases { get; set; }
     public DbSet<ProjectPermission> ProjectPermissions { get; set; }
+    public DbSet<DBModels.Task> Tasks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -40,6 +41,10 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .HasMany(u => u.Permissions)
             .WithOne(t => t.User);
 
+        builder.Entity<User>()
+            .HasMany(u => u.Tasks)
+            .WithMany(t => t.Assignees);
+
         builder.Entity<Team>()
             .HasMany(t => t.Members)
             .WithMany(u => u.Teams);
@@ -61,10 +66,18 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
         builder.Entity<User>()
             .HasMany(d => d.CheckedOutDocuments)
             .WithOne(v => v.CheckedOutBy);
-            
+
         builder.Entity<Customer>()
             .HasMany(d => d.Projects)
             .WithOne(v => v.Customer);
+
+        builder.Entity<ProjectPhase>()
+            .HasMany(d => d.Tasks)
+            .WithOne(v => v.Phase);
+
+        builder.Entity<DBModels.Task>()
+            .HasMany(d => d.SubTasks)
+            .WithOne(v => v.ParentTask);
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

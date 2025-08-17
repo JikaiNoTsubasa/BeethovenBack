@@ -146,7 +146,8 @@ public static class DTOHelper
             ProjectId = model.ProjectId,
             CanRead = model.CanRead,
             CanUpdate = model.CanUpdate,
-            CanCreateIssues = model.CanCreateIssues
+            CanCreateTasks = model.CanCreateTasks,
+            CanConfigure = model.CanConfigure
         };
     }
     #endregion

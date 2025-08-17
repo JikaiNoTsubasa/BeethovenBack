@@ -19,4 +19,6 @@ public class ProjectPhase
     [ForeignKey(nameof(NextPhase))]
     public long? NextPhaseId { get; set; }
     public ProjectPhase? NextPhase { get; set; }
+
+    public List<Task>? Tasks { get; set; }
 }

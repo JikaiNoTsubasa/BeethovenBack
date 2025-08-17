@@ -20,8 +20,9 @@ public class ProjectPermission
 
     public bool CanRead { get; set; }
     public bool CanUpdate { get; set; }
-    public bool CanCreateIssues { get; set; }
+    public bool CanCreateTasks { get; set; }
+    public bool CanConfigure { get; set; }
 
     [NonAction]
-    public void SetAllPermissions(bool value) => (CanRead, CanUpdate, CanCreateIssues) = (value, value, value);
+    public void SetAllPermissions(bool value) => (CanRead, CanUpdate, CanCreateTasks) = (value, value, value);
 }
