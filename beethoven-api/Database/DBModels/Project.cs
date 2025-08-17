@@ -19,4 +19,6 @@ public class Project : Entity
     [ForeignKey(nameof(Owner))]
     public long? OwnerId { get; set; }
     public User? Owner { get; set; }
+
+    public List<ProjectTask>? Tasks { get; set; }
 }

@@ -20,5 +20,5 @@ public class ProjectPhase
     public long? NextPhaseId { get; set; }
     public ProjectPhase? NextPhase { get; set; }
 
-    public List<Task>? Tasks { get; set; }
+    public List<ProjectTask>? Tasks { get; set; }
 }

@@ -12,6 +12,8 @@ public class ProjectController(ProjectManager manager) : BeeController
 {
     protected readonly ProjectManager _manager = manager;
 
+    #region Projects
+
     [HttpPost]
     [Route("api/projects")]
     public IActionResult CreateProject([FromBody] RequestCreateProject model)
@@ -78,5 +80,36 @@ public class ProjectController(ProjectManager manager) : BeeController
         return StatusCode(StatusCodes.Status200OK, documents);
     }
 
+    #endregion
 
+    #region Tasks
+
+    [HttpPost]
+    [Route("api/projects/{id}/tasks")]
+    public IActionResult CreateProjectTask([FromRoute] long id, [FromBody] RequestCreateTask model)
+    {
+        var task = _manager.CreateTaskForProject(
+            id,
+            model.Name,
+            model.PhaseId,
+            _loggedUserId,
+            model.Description,
+            model.StartDate,
+            model.EndDate,
+            model.AssigneeIds,
+            model.EstimatedMinutes,
+            model.Priority
+        ).ToDTO();
+        return StatusCode(StatusCodes.Status200OK, task);
+    }
+
+    [HttpGet]
+    [Route("api/projects/{id}/tasks")]
+    public IActionResult FetchProjectTasks([FromRoute] long id)
+    {
+        var tasks = _manager.FetchProjectTasks(id).Select(p => p.ToDTO()).ToList();
+        return StatusCode(StatusCodes.Status200OK, tasks);
+    }
+
+    #endregion
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace beethoven_api.Database.DBModels;
 
-public class Task : Entity
+public class ProjectTask : Entity
 {
     public string? Description { get; set; }
 
@@ -14,13 +14,17 @@ public class Task : Entity
     public Priority Priority { get; set; } = Priority.LOW;
     public TaskStatus Status { get; set; } = TaskStatus.TODO;
 
+    [ForeignKey(nameof(Project))]
+    public long? ProjectId { get; set; }
+    public Project? Project { get; set; }
+
     [ForeignKey(nameof(Phase))]
     public long? PhaseId { get; set; }
     public ProjectPhase? Phase { get; set; }
 
     [ForeignKey(nameof(Document))]
     public long? ParentTaskId { get; set; }
-    public Task? ParentTask { get; set; }
+    public ProjectTask? ParentTask { get; set; }
 
-    public List<Task>? SubTasks { get; set; }
+    public List<ProjectTask>? SubTasks { get; set; }
 }

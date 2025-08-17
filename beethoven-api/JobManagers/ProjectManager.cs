@@ -160,4 +160,47 @@ public class ProjectManager(BeeDBContext context) : BeeManager(context)
             .Where(d => d.EntityId == projectId)
             ];
     }
+
+    #region Tasks
+    public List<ProjectTask> FetchProjectTasks(long projectId)
+    {
+        var prj = _context.Projects
+            .Include(p => p.Tasks)
+            .Where(t => t.Id == projectId)
+            .FirstOrDefault() ?? throw new Exception("Project not found");
+
+        return prj.Tasks ?? [];
+    }
+
+    public ProjectTask CreateTaskForProject(
+        long projectId,
+        string name,
+        long phaseId,
+        long userId,
+        string? description,
+        DateTime? startDate,
+        DateTime? endDate,
+        List<long>? assigneeIds,
+        int? estimatedMinutes,
+        Priority? priority
+        )
+    {
+        ProjectTask task = new()
+        {
+            Name = name,
+            PhaseId = phaseId,
+            Description = description,
+            StartDate = startDate,
+            EndDate = endDate,
+            Assignees = assigneeIds is not null ? [.. _context.Users.Where(u => assigneeIds.Contains(u.Id))] : null,
+            EstimatedMinutes = estimatedMinutes ?? 0,
+            Priority = priority ?? Priority.LOW,
+            ProjectId = projectId
+        };
+        task.MarkCreated(userId);
+        _context.ProjectTasks.Add(task);
+        _context.SaveChanges();
+        return task;
+    }
+    #endregion
 }

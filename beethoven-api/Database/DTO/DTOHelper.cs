@@ -152,6 +152,36 @@ public static class DTOHelper
     }
     #endregion
 
+    #region Tasks
+
+    public static ResponseTask ToDTO(this DBModels.ProjectTask model)
+    {
+        return new ResponseTask
+        {
+            Id = model.Id,
+            Name = model.Name,
+            Description = model.Description,
+            StartDate = model.StartDate,
+            EndDate = model.EndDate,
+            Priority = model.Priority,
+            Status = model.Status,
+            ProjectId = model.ProjectId,
+            Assignees = model.Assignees?.Select(u => u.ToDTO()).ToList(),
+            EstimatedMinutes = model.EstimatedMinutes,
+            PhaseId = model.PhaseId,
+
+            IsDeleted = model.IsDeleted,
+            CreatedAt = model.CreatedAt,
+            CreatedById = model.CreatedById,
+            UpdatedAt = model.UpdatedAt,
+            UpdatedById = model.UpdatedById,
+            DeletedAt = model.DeletedAt,
+            DeletedById = model.DeletedById
+        };
+    }
+
+    #endregion
+
     #region Document
     public static ResponseDocument ToDTO(this Document model)
     {
