@@ -45,6 +45,14 @@ public class BeeDBContext(DbContextOptions options) : DbContext(options)
             .HasMany(u => u.Tasks)
             .WithMany(t => t.Assignees);
 
+        builder.Entity<User>()
+            .HasMany(u => u.SendMessages)
+            .WithOne(t => t.From);
+
+        builder.Entity<User>()
+            .HasMany(u => u.ReceivedMessages)
+            .WithOne(t => t.To);
+
         builder.Entity<Team>()
             .HasMany(t => t.Members)
             .WithMany(u => u.Teams);

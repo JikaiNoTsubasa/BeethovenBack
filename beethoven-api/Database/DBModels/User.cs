@@ -16,4 +16,6 @@ public class User : Entity
     public List<Project>? Projects { get; set; }
     public List<DocumentVersion>? CheckedOutDocuments { get; set; }
     public List<ProjectTask>? Tasks { get; set; }
+    public List<InboxMessage>? SendMessages { get; set; }
+    public List<InboxMessage>? ReceivedMessages { get; set; }
 }
